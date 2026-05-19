@@ -1,8 +1,10 @@
 import React from 'react'
 import { useFinance } from '../../context/FinanceContext';
+import { useModal } from '../../context/ModalContext';
 
 function ExpenseItem({expense}) {
 const {deleteExpense} = useFinance();
+const { openModal } = useModal();
 
     const categoryIcons = {
     "Food & Dining": "🍔",
@@ -24,7 +26,7 @@ const {deleteExpense} = useFinance();
         </div>
         <div className="expense-amount" style={{color:'var(--red)'}}>&#8377;{expense.amount}</div>
         <div className="expense-actions">
-          <div className="icon-btn edit">✏️</div>
+          <div className="icon-btn edit" onClick={() => openModal("expense", expense)}>✏️</div>
           <div className="icon-btn del" onClick={()=>deleteExpense(expense.id)}>🗑️</div>
         </div>
     </div>

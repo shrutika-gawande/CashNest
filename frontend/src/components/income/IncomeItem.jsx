@@ -1,8 +1,10 @@
 import React from 'react'
 import { useFinance } from '../../context/FinanceContext';
+import { useModal } from '../../context/ModalContext';
 
 function IncomeItem({ income }) {
 const {deleteIncome} = useFinance();
+const { openModal } = useModal();
 
     const sourceIcons = {
         Salary: "💼",
@@ -23,7 +25,7 @@ const {deleteIncome} = useFinance();
             </div>
             <div className="expense-amount" style={{ color: 'var(--green)' }}>&#8377;{income.amount}</div>
             <div className="expense-actions">
-                <div className="icon-btn edit">✏️</div>
+                <div className="icon-btn edit" onClick={() => openModal("income", income)}>✏️</div>
                 <div className="icon-btn del" onClick={()=>deleteIncome(income.id)}>🗑️</div>
             </div>
         </div>
