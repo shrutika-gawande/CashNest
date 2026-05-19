@@ -1,0 +1,119 @@
+.expense-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  background: var(--card2);
+  border: 1px solid var(--border);
+  transition: var(--transition);
+  animation: slideIn 0.3s ease;
+}
+.expense-item:hover {
+  border-color: var(--border2);
+  background: var(--bg3);
+}
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.expense-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.expense-info {
+  flex: 1;
+  min-width: 0;
+}
+.expense-title {
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.expense-meta {
+  font-size: 12px;
+  color: var(--text2);
+  font-family: var(--mono);
+  margin-top: 2px;
+}
+.expense-amount {
+  font-size: 16px;
+  font-weight: 700;
+  font-family: var(--mono);
+  flex-shrink: 0;
+}
+.expense-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.expense-item:hover .expense-actions {
+  opacity: 1;
+}
+.icon-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+  font-size: 14px;
+  transition: var(--transition);
+}
+.icon-btn.edit {
+  background: var(--blue-bg);
+  color: var(--blue);
+}
+.icon-btn.edit:hover {
+  background: rgba(116, 185, 255, 0.2);
+}
+.icon-btn.del {
+  background: var(--red-bg);
+  color: var(--red);
+}
+.icon-btn.del:hover {
+  background: rgba(255, 107, 138, 0.2);
+}
+.expenses-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 440px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    gap: 12px;
+    color: var(--text3);
+}
+.empty-icon {
+    font-size: 48px;
+    opacity: 0.4;
+}
+.empty-text {
+    font-size: 14px;
+    text-align: center;
+}
