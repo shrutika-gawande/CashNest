@@ -5,10 +5,10 @@ import { useFinance } from "../../context/FinanceContext";
 import { useModal } from "../../context/ModalContext";
 
 function IncomeForm() {
-const {addIncome} = useFinance();
-const { closeModal } = useModal();
+  const { addIncome, editIncome } = useFinance();
+  const { closeModal, editItem } = useModal();
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState(editItem || {
     title: "",
     amount: "",
     date: "",
@@ -25,13 +25,19 @@ const { closeModal } = useModal();
     });
   };
 
-   const handleSubmit = (e) => {
-    e.preventDefault()
-    toast.success("Income added successfully!");
-    addIncome(formData);
-    console.log(formData);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (editItem) {
+      editIncome(editItem.id, formData);
+      toast.success("Income updated!");
+    } else {
+      addIncome(formData);
+      toast.success("Income added!");
+    }
+
     closeModal();
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit} className="form-grid">
@@ -67,9 +73,9 @@ const { closeModal } = useModal();
       </div>
       <div className="field form-full">
         <label>source</label>
-        <select 
-          name="source" 
-          value={formData.source} 
+        <select
+          name="source"
+          value={formData.source}
           onChange={handleChange}
         >
           <option value="Salary">💼 Salary</option>
@@ -98,7 +104,7 @@ const { closeModal } = useModal();
           marginTop: "10px",
         }}
       >
-        Add Income
+        {editItem ? "Update Income" : "Add Income"}
       </button>
     </form>
   );

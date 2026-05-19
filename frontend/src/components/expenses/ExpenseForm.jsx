@@ -5,10 +5,10 @@ import { useFinance } from '../../context/FinanceContext';
 import { useModal } from '../../context/ModalContext';
 
 function ExpenseForm() {
-const {addExpense} = useFinance();
-const { closeModal } = useModal();
+const {addExpense, editExpense} = useFinance();
+const { closeModal, editItem } = useModal();
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState(editItem || {
     title: "",
     amount: "",
     date: "",
@@ -26,12 +26,18 @@ const { closeModal } = useModal();
   }
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    toast.success("Expense added successfully!")
-    addExpense(formData);
-    console.log(formData);
+    e.preventDefault();
+
+    if (editItem) {
+      editExpense(editItem.id, formData);
+      toast.success("Expense updated!");
+    } else {
+      addExpense(formData);
+      toast.success("Expense added!");
+    }
+
     closeModal();
-  }
+  };
 
   return (
 
@@ -139,7 +145,7 @@ const { closeModal } = useModal();
           marginTop: '10px'
         }}
       >
-        Add Expense
+         {editItem ? "Update Expense" : "Add Expense"}
       </button>
 
     </form>
