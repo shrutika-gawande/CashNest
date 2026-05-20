@@ -7,7 +7,7 @@ import Dashboard from './pages/Dashboard';
 import Income from './pages/Income';
 import Expense from './pages/Expense';
 import Budget from './pages/Budget';
-import Analytics from './pages/Analytics';
+// import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
 import { FinanceProvider } from './context/FinanceContext';
 import { ModalProvider } from './context/ModalContext';
@@ -28,7 +28,7 @@ function App() {
           <Route path='income' element={<Income />} />
           <Route path='expense' element={<Expense />} />
           <Route path='budget' element={<Budget />} />
-          <Route path='analytics' element={<Analytics />} />
+          {/* <Route path='analytics' element={<Analytics />} /> */}
           <Route path='settings' element={<Settings />} />
         </Route>
       </Routes>
