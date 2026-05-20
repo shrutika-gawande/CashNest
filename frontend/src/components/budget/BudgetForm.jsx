@@ -3,7 +3,7 @@ import toast from 'react-hot-toast';
 import { useFinance } from '../../context/FinanceContext'
 
 function BudgetForm() {
-    const { budget, setBudget } = useFinance();
+    const { budget, saveBudget } = useFinance();
     const [error, setError] = useState('');
     const [inputValue, setInputValue] = useState(budget || '');
 
@@ -22,7 +22,7 @@ function BudgetForm() {
             setError(err);
             return;
         }
-        setBudget(Number(inputValue));
+        saveBudget(Number(inputValue));
         setError("");
         setInputValue("");
         toast.success('Budget set!')
