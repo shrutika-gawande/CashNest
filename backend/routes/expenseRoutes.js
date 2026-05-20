@@ -1,5 +1,5 @@
 import express from "express";
-import { getAll, create, update, remove } from "../controllers/expenseController.js";
+import { getAll, create, update, remove, deleteAll } from "../controllers/expenseController.js";
 
 const router = express.Router();
 
@@ -7,5 +7,6 @@ router.get("/", getAll);
 router.post("/", create);
 router.put("/:id", update);
 router.delete("/:id", remove);
+router.delete("/", deleteAll);
 
 export default router;
