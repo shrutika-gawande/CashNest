@@ -18,7 +18,7 @@ function ExpenseList({ filteredItems }) {
 
             {filteredItems.map((expense) => (
                 <ExpenseItem
-                    key={expense.id}
+                    key={expense._id}
                     expense={expense}
                 />
             ))}

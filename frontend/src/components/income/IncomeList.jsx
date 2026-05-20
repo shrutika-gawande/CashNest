@@ -18,7 +18,7 @@ function IncomeList({ filteredItems }) {
             
             {filteredItems.map((income) => (
                 <IncomeItem
-                    key={income.id}
+                    key={income._id}
                     income={income}
                 />
             ))}
