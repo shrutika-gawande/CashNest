@@ -45,4 +45,15 @@ const remove = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-export { getAll, create, update, remove };
+
+// DELETE /api/expenses
+const deleteAll = async (req, res) => {
+  try {
+    await Expense.deleteMany();
+    res.json({ message: "All expenses deleted" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export { getAll, create, update, remove, deleteAll };

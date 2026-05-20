@@ -46,4 +46,14 @@ const remove = async (req, res) => {
   }
 };
 
-export { getAll, create, update, remove };
+// DELETE /api/income
+const deleteAll = async (req, res) => {
+  try {
+    await Income.deleteMany();
+    res.json({ message: "All incomes deleted" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+export { getAll, create, update, remove, deleteAll };

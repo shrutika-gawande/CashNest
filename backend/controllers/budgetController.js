@@ -3,9 +3,9 @@ import Budget from "../models/Budget.js";
 // GET /api/budget
 const get = async (req, res) => {
   try {
-    const now   = new Date();
+    const now = new Date();
     const month = parseInt(req.query.month) || now.getMonth() + 1;
-    const year  = parseInt(req.query.year)  || now.getFullYear();
+    const year = parseInt(req.query.year) || now.getFullYear();
     const budget = await Budget.findOne({ month, year });
     res.json(budget || { amount: 0, month, year });
   } catch (err) {
@@ -16,14 +16,14 @@ const get = async (req, res) => {
 // POST /api/budget
 const save = async (req, res) => {
   try {
-    const now   = new Date();
+    const now = new Date();
     const { amount } = req.body;
     const month = parseInt(req.body.month) || now.getMonth() + 1;
-    const year  = parseInt(req.body.year)  || now.getFullYear();
+    const year = parseInt(req.body.year) || now.getFullYear();
     const budget = await Budget.findOneAndUpdate(
       { month, year },
       { amount },
-      { upsert: true, new: true }
+      { upsert: true, new: true },
     );
     res.json(budget);
   } catch (err) {
@@ -31,4 +31,17 @@ const save = async (req, res) => {
   }
 };
 
-export { get, save };
+// DELETE /api/budget
+const deleteAll = async (req, res) => {
+  try {
+    await Budget.deleteMany();
+    res.json({ message: "Budget deleted" });
+
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
+};
+
+export { get, save, deleteAll };
