@@ -12,7 +12,7 @@ const {incomes, expenses} = useFinance();
       <div className="logo">
         <div className="logo-icon">💸</div>
         <div className="logo-text">
-          Fin<span>Track</span>
+          Cash<span>Nest</span>
         </div>
       </div>
 
