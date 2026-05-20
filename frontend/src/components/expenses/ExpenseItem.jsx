@@ -27,7 +27,7 @@ const { openModal } = useModal();
         <div className="expense-amount" style={{color:'var(--red)'}}>&#8377;{expense.amount}</div>
         <div className="expense-actions">
           <div className="icon-btn edit" onClick={() => openModal("expense", expense)}>✏️</div>
-          <div className="icon-btn del" onClick={()=>deleteExpense(expense.id)}>🗑️</div>
+          <div className="icon-btn del" onClick={()=>deleteExpense(expense._id)}>🗑️</div>
         </div>
     </div>
   )
