@@ -1,19 +1,16 @@
-export const save = async (req, res) => {
-  try {
-    const now   = new Date();
-    const { amount } = req.body;
-    const month = parseInt(req.body.month) || now.getMonth() + 1;
-    const year  = parseInt(req.body.year)  || now.getFullYear();
+import mongoose from "mongoose";
 
-    const budget = await Budget.findOneAndUpdate(
-      { month, year },
-      { amount },
-      { upsert: true, new: true }   // ← creates if doesn't exist, updates if it does
-    );
+const budgetSchema = new mongoose.Schema(
+  {
+    amount: { type: Number, required: true },
+    month:  { type: Number, required: true },
+    year:   { type: Number, required: true },
+  },
+  { timestamps: true }
+);
 
-    res.json(budget);
-  } catch (err) {
-    console.log("❌ ERROR:", err.message);
-    res.status(500).json({ message: err.message });
-  }
-};
+budgetSchema.index({ month: 1, year: 1 }, { unique: true });
+
+const Budget = mongoose.models.Budget || mongoose.model("Budget", budgetSchema);
+
+export default Budget; 
