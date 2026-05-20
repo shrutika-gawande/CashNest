@@ -15,7 +15,7 @@ function QuickBudget() {
       <div>
         <div className='quick-label'>
           <span className='card-sub'>Spent</span>
-          <span className='quick-amt'>&#8377;{totalExpense} / &#8377;{budget}</span>
+          <span className='quick-amt'>&#8377;{budget && totalExpense} / &#8377;{budget}</span>
         </div>
         <BudgetMeter percentage={rawPercentage} />
         <div className="budget-labels">

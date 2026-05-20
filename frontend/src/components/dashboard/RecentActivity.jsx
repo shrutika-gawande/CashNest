@@ -10,9 +10,20 @@ function RecentActivity() {
         <div className="card-title">⚡ Recent Activity</div>
       </div>
       <div>
+        {allTransactions.length === 0 && (
+          <p
+            style={{
+              color: "#a0aec0",
+              textAlign: "center",
+            }}
+          >
+            No recent activities.
+          </p>
+        )}
+
         {allTransactions.slice(0, 4).map((item) => (
           <div className="activity-item" key={item._id}>
-            <div className="activity-dot" style={{background: item.type === 'income' ? 'var(--green)' : '#ff6b8a'}}></div>
+            <div className="activity-dot" style={{ background: item.type === 'income' ? 'var(--green)' : '#ff6b8a' }}></div>
             <div className="activity-text">{item.title}</div>
             <div className="activity-info">
               <span

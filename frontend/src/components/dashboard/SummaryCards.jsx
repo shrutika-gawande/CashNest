@@ -25,7 +25,7 @@ function SummaryCards() {
       <div className="summary-card" style={{ "--card-accent": "var(--accent-glow)" }}>
         <div className='card-icon' style={{ background: "var(--accent-glow)", color: "var(--accent2)" }}>🎯</div>
         <div className='card-label'>Remaining Budget</div>
-        <div className='card-value' style={{ color: "var(--accent2)" }}>&#8377;{remainingBudget}</div>
+        <div className='card-value' style={{ color: "var(--accent2)" }}>&#8377;{remainingBudget< 0 ? 0 : remainingBudget}</div>
         <div className='card-sub'>of {budget} budget</div>
         <div className="card-bar">
           <div className="card-bar-fill" style={{ width: "40%", background: "var(--accent" }}></div>
