@@ -1,93 +1,240 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import api from "../api/api";
 
 const FinanceContext = createContext();
 
 export function FinanceProvider({ children }) {
 
-    const [budget, setBudget] = useState(() =>
-        Number(localStorage.getItem("budget")) || 0
-    );
+  // STATES
 
-    const [incomes, setIncomes] = useState(() => {
-        const saved = localStorage.getItem("incomes");
-        return saved ? JSON.parse(saved) : [];
-    });
+  const [budget, setBudget] = useState(
+    () => Number(localStorage.getItem("budget")) || 0,
+  );
 
-    const [expenses, setExpenses] = useState(() => {
-        const saved = localStorage.getItem("expenses");
-        return saved ? JSON.parse(saved) : [];
-    });
+  const [incomes, setIncomes] = useState(() => {
+    const saved = localStorage.getItem("incomes");
+    return saved ? JSON.parse(saved) : [];
+  });
 
-    // Save to localStorage whenever data changes
-    useEffect(() => {
-        localStorage.setItem("incomes", JSON.stringify(incomes));
-    }, [incomes]);
-    useEffect(() => {
-        localStorage.setItem("expenses", JSON.stringify(expenses));
-    }, [expenses]);
-    useEffect(() => {
-        localStorage.setItem("budget", budget);
-    }, [budget]);
+  const [expenses, setExpenses] = useState(() => {
+    const saved = localStorage.getItem("expenses");
+    return saved ? JSON.parse(saved) : [];
+  });
 
-    const generateId = () => `TXN-${Date.now().toString().slice(-6)}`;
+  // FETCH DATA FROM BACKEND
 
-    // ADD
-    const addIncome = (entry) => {
-        setIncomes((prev) => [...prev, { id: generateId(), ...entry }]);
-    };
-    const addExpense = (entry) => {
-        setExpenses((prev) => [...prev, { id: generateId(), ...entry }]);
-    };
+  useEffect(() => {
+    fetchIncomes();
+    fetchExpenses();
+    fetchBudget();
+  }, []);
 
-    // DELETE
-    const deleteIncome = (id) => {
-        setIncomes((prev) => prev.filter((i) => i.id !== id));
-    };
-    const deleteExpense = (id) => {
-        setExpenses((prev) => prev.filter((e) => e.id !== id));
-    };
+  const fetchIncomes = async () => {
+    try {
+      const res = await api.get("/api/incomes");
 
-    // EDIT
-    const editIncome = (id, updatedEntry) => {
-        setIncomes((prev) =>
-            prev.map((i) => (i.id === id ? { ...i, ...updatedEntry } : i)),
-        );
-    };
-    const editExpense = (id, updatedEntry) => {
-        setExpenses((prev) =>
-            prev.map((e) => (e.id === id ? { ...e, ...updatedEntry } : e)),
-        );
-    };
+      setIncomes(res.data);
 
-    const totalIncome = incomes.reduce((sum, i) => sum + Number(i.amount), 0);
-    const totalExpense = expenses.reduce((sum, e) => sum + Number(e.amount), 0);
-    const balance = totalIncome - totalExpense;
-    const clearAll = () => {
-        setIncomes([]);
-        setExpenses([]);
-        localStorage.removeItem("expenses");
-        localStorage.removeItem("incomes");
-        localStorage.removeItem("budget");
-    };
+      localStorage.setItem("incomes", JSON.stringify(res.data));
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
-    // BUDGET
-    const remainingBudget = Number(budget - totalExpense);
-    const rawPercentage = budget > 0 ? (totalExpense / budget) * 100 : 0;
-    const displayPercentage = Math.min(rawPercentage, 100).toFixed(1);
+  const fetchExpenses = async () => {
+    try {
+      const res = await api.get("/api/expenses");
 
-    const allTransactions = [...incomes.map(i => ({ ...i, type: 'income' })),
-    ...expenses.map(e => ({ ...e, type: 'expense' }))]
-        .sort((a, b) => b.id - a.id); // newest first (id is Date.now())
+      setExpenses(res.data);
 
-    return (
-        <FinanceContext.Provider
-            value={{ allTransactions, rawPercentage, displayPercentage, budget, setBudget, remainingBudget, totalIncome, addIncome, incomes, expenses, totalExpense, addExpense, balance, clearAll, deleteIncome, deleteExpense, editIncome, editExpense, }}
-        >
-            {children}
-        </FinanceContext.Provider>
-    );
+      localStorage.setItem("expenses", JSON.stringify(res.data));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const fetchBudget = async () => {
+    try {
+      const res = await api.get("/api/budget");
+      if (res.data?.amount) {
+        setBudget(res.data.amount);
+        localStorage.setItem("budget", res.data.amount);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+// Replace your current setBudget calls with this function
+const saveBudget = async (amount) => {
+  try {
+    setBudget(amount);                          // update state immediately
+    await api.post("/api/budget", { amount }); // persist to MongoDB
+  } catch (err) {
+    console.log(err);
+  }
+};
+  // LOCAL STORAGE SYNC
+
+  useEffect(() => {
+    localStorage.setItem("incomes", JSON.stringify(incomes));
+  }, [incomes]);
+
+  useEffect(() => {
+    localStorage.setItem("expenses", JSON.stringify(expenses));
+  }, [expenses]);
+
+  useEffect(() => {
+    localStorage.setItem("budget", budget);
+  }, [budget]);
+
+  // ADD INCOME
+
+  const addIncome = async (entry) => {
+    try {
+      const res = await api.post("/api/incomes", entry);
+
+      setIncomes((prev) => [res.data, ...prev]);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // ADD EXPENSE
+
+  const addExpense = async (entry) => {
+    try {
+      const res = await api.post("/api/expenses", entry);
+
+      setExpenses((prev) => [res.data, ...prev]);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // DELETE INCOME
+
+  const deleteIncome = async (id) => {
+    try {
+      await api.delete(`/api/incomes/${id}`);
+
+      setIncomes((prev) => prev.filter((i) => i._id !== id));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // DELETE EXPENSE
+
+  const deleteExpense = async (id) => {
+    try {
+      await api.delete(`/api/expenses/${id}`);
+
+      setExpenses((prev) => prev.filter((e) => e._id !== id));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // EDIT INCOME
+
+  const editIncome = async (id, updatedEntry) => {
+    try {
+      const res = await api.put(`/api/incomes/${id}`, updatedEntry);
+
+      setIncomes((prev) => prev.map((i) => (i._id === id ? res.data : i)));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // EDIT EXPENSE
+
+  const editExpense = async (id, updatedEntry) => {
+    try {
+      const res = await api.put(`/api/expenses/${id}`, updatedEntry);
+
+      setExpenses((prev) => prev.map((e) => (e._id === id ? res.data : e)));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // CLEAR ALL
+
+  const clearAll = () => {
+    setIncomes([]);
+    setExpenses([]);
+    setBudget(0);
+
+    localStorage.removeItem("incomes");
+    localStorage.removeItem("expenses");
+    localStorage.removeItem("budget");
+  };
+
+  // CALCULATIONS
+
+  const totalIncome = incomes.reduce((sum, i) => sum + Number(i.amount), 0);
+
+  const totalExpense = expenses.reduce((sum, e) => sum + Number(e.amount), 0);
+
+  const balance = totalIncome - totalExpense;
+
+  const remainingBudget = Number(budget) - totalExpense;
+
+  const rawPercentage = budget > 0 ? (totalExpense / budget) * 100 : 0;
+
+  const displayPercentage = Math.min(rawPercentage, 100).toFixed(1);
+
+  // ALL TRANSACTIONS
+
+  const allTransactions = [
+    ...incomes.map((i) => ({
+      ...i,
+      type: "income",
+    })),
+
+    ...expenses.map((e) => ({
+      ...e,
+      type: "expense",
+    })),
+  ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  // PROVIDER
+
+  return (
+    <FinanceContext.Provider
+      value={{
+        // states
+        budget,
+        setBudget,
+        saveBudget,
+        incomes,
+        expenses,
+
+        // totals
+        totalIncome,
+        totalExpense,
+        balance,
+        remainingBudget,
+        rawPercentage,
+        displayPercentage,
+
+        // transactions
+        allTransactions,
+
+        // actions
+        addIncome,
+        addExpense,
+        deleteIncome,
+        deleteExpense,
+        editIncome,
+        editExpense,
+        clearAll,
+      }}
+    >
+      {children}
+    </FinanceContext.Provider>
+  );
 }
-export const useFinance = () => useContext(FinanceContext);
 
-// any function that calls setExpenses or setIncomes will automatically trigger the useEffect
-// and sync to localStorage. You never have to manually call localStorage.setItem anywhere else.
+export const useFinance = () => useContext(FinanceContext);
