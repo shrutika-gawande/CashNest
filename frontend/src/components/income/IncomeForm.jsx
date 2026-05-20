@@ -29,7 +29,7 @@ function IncomeForm() {
     e.preventDefault();
 
     if (editItem) {
-      editIncome(editItem.id, formData);
+      editIncome(editItem._id, formData);
       toast.success("Income updated!");
     } else {
       addIncome(formData);

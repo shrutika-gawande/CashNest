@@ -29,7 +29,7 @@ const { closeModal, editItem } = useModal();
     e.preventDefault();
 
     if (editItem) {
-      editExpense(editItem.id, formData);
+      editExpense(editItem._id, formData);
       toast.success("Expense updated!");
     } else {
       addExpense(formData);
