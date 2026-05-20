@@ -59,8 +59,8 @@ function Settings() {
           <div className="settings-title">About</div>
           <div className="settings-item">
             <div>
-              <div className="settings-label">FinTrack v1.0</div>
-              <div className="settings-desc">Personal Finance Tracker — FinTrack</div>
+              <div className="settings-label">CashNest v1.0</div>
+              <div className="settings-desc">Personal Finance Tracker — CashNest</div>
             </div>
             <span style={{ color: 'var(--text3)', fontSize: '12px', fontFamily: 'var(--mono)' }}>{new Date().getFullYear()}</span>
           </div>
