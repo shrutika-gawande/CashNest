@@ -4,7 +4,6 @@ import api from "../api/api";
 const FinanceContext = createContext();
 
 export function FinanceProvider({ children }) {
-
   // STATES
 
   const [budget, setBudget] = useState(
@@ -64,15 +63,16 @@ export function FinanceProvider({ children }) {
       console.log(err);
     }
   };
-// Replace your current setBudget calls with this function
-const saveBudget = async (amount) => {
-  try {
-    setBudget(amount);                          // update state immediately
-    await api.post("/api/budget", { amount }); // persist to MongoDB
-  } catch (err) {
-    console.log(err);
-  }
-};
+
+  const saveBudget = async (amount) => {
+    try {
+      setBudget(amount); // update state immediately
+      await api.post("/api/budget", { amount }); // persist to MongoDB
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   // LOCAL STORAGE SYNC
 
   useEffect(() => {
@@ -161,14 +161,26 @@ const saveBudget = async (amount) => {
 
   // CLEAR ALL
 
-  const clearAll = () => {
-    setIncomes([]);
-    setExpenses([]);
-    setBudget(0);
+  const clearAll = async () => {
+    try {
+      // DELETE EVERYTHING FROM DATABASE
+      await api.delete("/api/incomes");
+      await api.delete("/api/expenses");
+      await api.delete("/api/budget");
 
-    localStorage.removeItem("incomes");
-    localStorage.removeItem("expenses");
-    localStorage.removeItem("budget");
+      // CLEAR FRONTEND STATES
+      setIncomes([]);
+      setExpenses([]);
+      setBudget(0);
+
+      // CLEAR LOCAL STORAGE
+      localStorage.removeItem("incomes");
+      localStorage.removeItem("expenses");
+      localStorage.removeItem("budget");
+    
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   // CALCULATIONS
@@ -197,7 +209,7 @@ const saveBudget = async (amount) => {
       ...e,
       type: "expense",
     })),
-  ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  ].sort((a, b) => new Date(b.date) - new Date(a.date));
 
   // PROVIDER
 
