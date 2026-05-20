@@ -39,10 +39,10 @@ const {incomes, expenses} = useFinance();
           <span className="icon">🎯</span> 
           Budget
         </NavLink>
-        <NavLink to="/analytics" className="nav-item">
+        {/* <NavLink to="/analytics" className="nav-item">
           <span className="icon">📊</span> 
           Analytics
-        </NavLink>
+        </NavLink> */}
 
         <div className="nav-label">System</div>
         <NavLink to="/settings" className="nav-item">
