@@ -7,10 +7,10 @@ A modern full-stack personal finance management application built using the **ME
 # 🚀 Live Demo
 
 Frontend:
-[CashNest Frontend](https://vercel.com?utm_source=chatgpt.com)
+[CashNest Frontend](https://cash-nest-kappa.vercel.app/)
 
 Backend API:
-[CashNest Backend](https://render.com?utm_source=chatgpt.com)
+[CashNest Backend](https://cashnest-d40z.onrender.com)
 
 ---
 
@@ -172,13 +172,13 @@ CLIENT_URL=http://localhost:5173
 
 ```bash
 cd backend
-npm run dev
+node server.js
 ```
 
 ## Start Frontend
 
 ```bash
-cd client
+cd frontend
 npm run dev
 ```
 
@@ -237,17 +237,17 @@ Built using:
 ## Frontend Deployment
 
 Deployed on:
-[Vercel](https://vercel.com?utm_source=chatgpt.com)
+[Vercel](https://cash-nest-kappa.vercel.app/)
 
 ## Backend Deployment
 
 Deployed on:
-[Render](https://render.com?utm_source=chatgpt.com)
+[Render](https://cashnest-d40z.onrender.com)
 
 ## Database
 
 Hosted on:
-[MongoDB Atlas](https://www.mongodb.com/atlas/database?utm_source=chatgpt.com)
+[MongoDB Atlas](https://cloud.mongodb.com/v2/6a0ca3b39c3ce5c07080ecec#/explorer/6a0ca3cd491cb454ac5074c3/test)
 
 ---
 
@@ -270,7 +270,6 @@ Through this project:
 
 * Authentication & Authorization
 * JWT Login System
-* PDF Export Reports
 * AI Financial Insights
 * Recurring Transactions
 * Monthly Analytics
